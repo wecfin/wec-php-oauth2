@@ -5,30 +5,13 @@ use Gap\Open\Dto\AccessTokenDto;
 
 class AccessService extends ServiceBase
 {
-    public function accessToken(array $opts): ?AccessTokenDto
-    {
-        $accessToken = $this->createAccessToken($opts);
-        if (is_null($accessToken)) {
-            return null;
-        }
-
-        if (strpos($accessToken->scope, 'openId') !== false) {
-            $accessToken->idToken = (string) $this->idToken(
-                $accessToken->userId,
-                $opts['companyCode']
-            );
-        }
-
-        return $accessToken;
-    }
-
     public function create(array $opts): AccessTokenDto
     {
         return $this->getOpenServer()->accessTokenService()
             ->create($opts);
     }
 
-    private function createAccessToken(array $opts): ?AccessTokenDto
+    public function accessToken(array $opts): ?AccessTokenDto
     {
         $openServer = $this->getOpenServer();
         $grantType = $opts['grantType'];
